@@ -25,7 +25,7 @@ public class Constants {
 	public static final int AI_PADDLE_MAX_SPEED = 8;
 	
 	// Score to end the game
-	public static final int END_SCORE = 10;
+	public static final int END_SCORE = 5;
 	
 	// Ball constants
 	public static final int BALL_SPEED = 8;
