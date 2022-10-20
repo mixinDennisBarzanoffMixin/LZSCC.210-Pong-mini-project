@@ -28,7 +28,7 @@ public class BodyHelper {
 		
 		return body;
 	}
-	
+
 	// Creation of circular shapes
 	public static Body createCircularBody(float x, float y, float radius, BodyType bodyType, float density, World world, ContactType type) {
 		Body body = world.createBody(getBodyDef(x, y, bodyType));

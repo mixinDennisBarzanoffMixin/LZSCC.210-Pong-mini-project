@@ -45,6 +45,7 @@ public class Player extends PlayerPaddle {
 	
 	public void PlayerPaddleHeight(int newheight) {
 		this.height = newheight;
+		gameScreen.getWorld().destroyBody(body);
 		CreateBody(gameScreen);
 	}
 	
@@ -75,11 +76,7 @@ public class Player extends PlayerPaddle {
 	}
 
 	public void CreateBody(GameScreen gameScreen) {
-		this.body = BodyHelper.createRectangularBody(x, y, Constants.PLAYER_PADDLE_WIDTH, height, BodyType.KinematicBody, 1f, gameScreen.getWorld(), ContactType.PLAYER);
-	}
-
-	public void UpdateBody(GameScreen gameScreen) {
-		this.body = BodyHelper.createRectangularBody(x, y, Constants.PLAYER_PADDLE_WIDTH, height, BodyType.KinematicBody, 1f, gameScreen.getWorld(), ContactType.PLAYER);
+		body = BodyHelper.createRectangularBody(x, y, Constants.PLAYER_PADDLE_WIDTH, height, BodyType.KinematicBody, 1f, gameScreen.getWorld(), ContactType.PLAYER);
 	}
 
 }
