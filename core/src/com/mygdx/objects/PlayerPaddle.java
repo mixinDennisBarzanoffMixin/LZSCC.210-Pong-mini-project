@@ -1,7 +1,6 @@
 package com.mygdx.objects;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -25,6 +24,7 @@ public abstract class PlayerPaddle {
 		this.score = 0;
 		
 		// Pixmap used to create a texture without using a file
+		/*
 		Pixmap pixmap = new Pixmap(16, 64, Pixmap.Format.RGBA8888);
 		pixmap.setBlending(Pixmap.Blending.None);
         pixmap.setColor(Color.WHITE);
@@ -33,15 +33,16 @@ public abstract class PlayerPaddle {
 		this.texture = new Texture(pixmap);
 		
 		pixmap.dispose();
+		*/
 	}
 	
-	public void update() {
+	public void update() {/*		
 		x = body.getPosition().x * Constants.PPM - (Constants.PLAYER_PADDLE_WIDTH/2);
-		y = body.getPosition().y * Constants.PPM - (Constants.PLAYER_PADDLE_HEIGHT/2);
+		y = body.getPosition().y * Constants.PPM - (Constants.PLAYER_PADDLE_HEIGHT/2);*/
 	}
 	
 	public void render(SpriteBatch spriteBatch) {
-		spriteBatch.draw(texture, x, y, Constants.PLAYER_PADDLE_WIDTH, Constants.PLAYER_PADDLE_HEIGHT);
+		//spriteBatch.draw(texture, x, y, Constants.PLAYER_PADDLE_WIDTH, Constants.PLAYER_PADDLE_HEIGHT);
 	}
 		
 	

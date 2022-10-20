@@ -1,5 +1,9 @@
 package com.mygdx.objects;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.mygdx.helpers.BodyHelper;
 import com.mygdx.helpers.Constants;
@@ -16,13 +20,22 @@ public class PlayerAI extends PlayerPaddle {
 		
 		this.gameScreen = gameScreen;
 		
+		Pixmap pixmap = new Pixmap(Constants.AI_PADDLE_WIDTH, Constants.AI_PADDLE_HEIGHT, Pixmap.Format.RGBA8888);
+		pixmap.setBlending(Pixmap.Blending.None);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fill();
+        
+		this.texture = new Texture(pixmap);
+		
+		pixmap.dispose();
+		
 		// Body creation: paddles are kinematic bodies
 		this.body = BodyHelper.createRectangularBody(x, y, Constants.AI_PADDLE_WIDTH, Constants.AI_PADDLE_HEIGHT, BodyType.KinematicBody, 1f, gameScreen.getWorld(), ContactType.AI);
 	}
 	
 	@Override
 	public void update() {
-		super.update();
+		//super.update();
 		
 		// Gets the ball to check its position
 		Ball ball = gameScreen.getBall();
@@ -39,6 +52,14 @@ public class PlayerAI extends PlayerPaddle {
 		this.velY = getNewVelocity(direction, Constants.AI_PADDLE_MAX_SPEED);
 		
 		setNewVelocity(Constants.AI_PADDLE_HEIGHT);
+		
+		x = body.getPosition().x * Constants.PPM - (Constants.AI_PADDLE_WIDTH/2);
+		y = body.getPosition().y * Constants.PPM - (Constants.AI_PADDLE_HEIGHT/2);
+	}
+	
+	@Override
+	public void render(SpriteBatch spriteBatch) {
+		spriteBatch.draw(texture, x, y, Constants.AI_PADDLE_WIDTH, Constants.AI_PADDLE_HEIGHT);
 	}
 	
 	

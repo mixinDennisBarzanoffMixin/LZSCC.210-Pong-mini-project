@@ -83,7 +83,7 @@ public class GameScreen extends ScreenAdapter{
 		this.ball.update();
 		
 		this.batch.setProjectionMatrix(this.camera.combined);
-		
+
 		// Reset button in case the ball gets stuck horizontally 
 		if(Gdx.input.isKeyPressed(Input.Keys.R))
 			this.ball.reset();
