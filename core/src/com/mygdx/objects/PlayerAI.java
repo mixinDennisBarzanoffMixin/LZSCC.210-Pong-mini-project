@@ -12,15 +12,17 @@ import com.mygdx.screens.GameScreen;
 
 public class PlayerAI extends PlayerPaddle {
 	
+	private int height;
 	// The AI needs to remember the game screen to keep track of the ball
 	private GameScreen gameScreen;
 	
 	public PlayerAI(float x, float y, GameScreen gameScreen) {
 		super(x, y, gameScreen);
+		this.height = 64;
 		
 		this.gameScreen = gameScreen;
 		
-		Pixmap pixmap = new Pixmap(Constants.AI_PADDLE_WIDTH, Constants.AI_PADDLE_HEIGHT, Pixmap.Format.RGBA8888);
+		Pixmap pixmap = new Pixmap(Constants.AI_PADDLE_WIDTH, height, Pixmap.Format.RGBA8888);
 		pixmap.setBlending(Pixmap.Blending.None);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
@@ -30,7 +32,11 @@ public class PlayerAI extends PlayerPaddle {
 		pixmap.dispose();
 		
 		// Body creation: paddles are kinematic bodies
-		this.body = BodyHelper.createRectangularBody(x, y, Constants.AI_PADDLE_WIDTH, Constants.AI_PADDLE_HEIGHT, BodyType.KinematicBody, 1f, gameScreen.getWorld(), ContactType.AI);
+		this.body = BodyHelper.createRectangularBody(x, y, Constants.AI_PADDLE_WIDTH, height, BodyType.KinematicBody, 1f, gameScreen.getWorld(), ContactType.AI);
+	}
+	
+	public void AIPaddleHeight(int newheight) {
+		this.height = newheight;
 	}
 	
 	@Override
@@ -51,15 +57,15 @@ public class PlayerAI extends PlayerPaddle {
 		// Potentail new velocity if not too close to borders
 		this.velY = getNewVelocity(direction, Constants.AI_PADDLE_MAX_SPEED);
 		
-		setNewVelocity(Constants.AI_PADDLE_HEIGHT);
+		setNewVelocity(height);
 		
 		x = body.getPosition().x * Constants.PPM - (Constants.AI_PADDLE_WIDTH/2);
-		y = body.getPosition().y * Constants.PPM - (Constants.AI_PADDLE_HEIGHT/2);
+		y = body.getPosition().y * Constants.PPM - (height/2);
 	}
 	
 	@Override
 	public void render(SpriteBatch spriteBatch) {
-		spriteBatch.draw(texture, x, y, Constants.AI_PADDLE_WIDTH, Constants.AI_PADDLE_HEIGHT);
+		spriteBatch.draw(texture, x, y, Constants.AI_PADDLE_WIDTH, height);
 	}
 	
 	

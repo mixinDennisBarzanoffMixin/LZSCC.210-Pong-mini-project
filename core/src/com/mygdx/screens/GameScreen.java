@@ -34,7 +34,7 @@ public class GameScreen extends ScreenAdapter{
 	// World is needed within the Box2D library 
 	private World world;
 	// Uncomment for debugging
-	//private Box2DDebugRenderer debugRenderer;
+	private Box2DDebugRenderer debugRenderer;
 	private BitmapFont font;
 	
 	//objects
@@ -61,7 +61,7 @@ public class GameScreen extends ScreenAdapter{
 		this.world = new World(new Vector2(0, 0), false);
 		
 		// Uncomment for debugging
-		//this.debugRenderer = new Box2DDebugRenderer();
+		this.debugRenderer = new Box2DDebugRenderer();
 		
 		this.world.setContactListener(new GameContactListener(this)); // Contact listener initialisation
 
@@ -138,6 +138,8 @@ public class GameScreen extends ScreenAdapter{
 	void onPowerUpShouldActivate(MysteryBox box) {
 		// TODO: implement
 		System.out.println("On powerup should activate");
+		player.PlayerPaddleHeight(250);
+		//ai.AIPaddleHeight(128);
 	}
 
 	@Override
@@ -173,7 +175,7 @@ public class GameScreen extends ScreenAdapter{
 		this.batch.end();
 		
 		// Uncomment for debugging
-		//this.debugRenderer.render(world, camera.combined.scl(Constants.PPM));
+		this.debugRenderer.render(world, camera.combined.scl(Constants.PPM));
 	}
 
 	// Getter methods for world and ball

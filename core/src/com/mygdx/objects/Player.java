@@ -12,13 +12,25 @@ import com.mygdx.helpers.Constants;
 import com.mygdx.helpers.ContactType;
 import com.mygdx.screens.GameScreen;
 
+/* 1- remove body, replace with larger body
+   2- stretch Body
+   3- modify collision mode
+   4- use two different bodies
+   5- fail
+*/
+
 public class Player extends PlayerPaddle {
 	
+	private int height;
+	private GameScreen gameScreen;
+
 	public Player(float x, float y, GameScreen gameScreen) {
 		
 		super(x,y,gameScreen);
+		this.height = 64;
+		this.gameScreen = gameScreen;
 		
-		Pixmap pixmap = new Pixmap(Constants.PLAYER_PADDLE_WIDTH, Constants.PLAYER_PADDLE_HEIGHT, Pixmap.Format.RGBA8888);
+		Pixmap pixmap = new Pixmap(Constants.PLAYER_PADDLE_WIDTH, height, Pixmap.Format.RGBA8888);
 		pixmap.setBlending(Pixmap.Blending.None);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
@@ -28,7 +40,12 @@ public class Player extends PlayerPaddle {
 		pixmap.dispose();
 		
 		// Body creation: paddles are kinematic bodies
-		this.body = BodyHelper.createRectangularBody(x, y, Constants.PLAYER_PADDLE_WIDTH, Constants.PLAYER_PADDLE_HEIGHT, BodyType.KinematicBody, 1f, gameScreen.getWorld(), ContactType.PLAYER);
+		CreateBody(gameScreen);
+	}
+	
+	public void PlayerPaddleHeight(int newheight) {
+		this.height = newheight;
+		CreateBody(gameScreen);
 	}
 	
 	public void update() {
@@ -45,16 +62,24 @@ public class Player extends PlayerPaddle {
 		// Computation of potential new velocity, it depends on the distance to borders
 		this.velY = getNewVelocity(direction, Constants.PLAYER_PADDLE_MAX_SPEED);
 		
-		setNewVelocity(Constants.PLAYER_PADDLE_HEIGHT);
+		setNewVelocity(height);
 		
 		x = body.getPosition().x * Constants.PPM - (Constants.PLAYER_PADDLE_WIDTH/2);
-		y = body.getPosition().y * Constants.PPM - (Constants.PLAYER_PADDLE_HEIGHT/2);
+		y = body.getPosition().y * Constants.PPM - (height/2);
 					
 	}
 	
 	@Override
 	public void render(SpriteBatch spriteBatch) {
-		spriteBatch.draw(texture, x, y, Constants.PLAYER_PADDLE_WIDTH, Constants.PLAYER_PADDLE_HEIGHT);
+		spriteBatch.draw(texture, x, y, Constants.PLAYER_PADDLE_WIDTH, height);
+	}
+
+	public void CreateBody(GameScreen gameScreen) {
+		this.body = BodyHelper.createRectangularBody(x, y, Constants.PLAYER_PADDLE_WIDTH, height, BodyType.KinematicBody, 1f, gameScreen.getWorld(), ContactType.PLAYER);
+	}
+
+	public void UpdateBody(GameScreen gameScreen) {
+		this.body = BodyHelper.createRectangularBody(x, y, Constants.PLAYER_PADDLE_WIDTH, height, BodyType.KinematicBody, 1f, gameScreen.getWorld(), ContactType.PLAYER);
 	}
 
 }
