@@ -1,0 +1,71 @@
+package com.mygdx.screens;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.helpers.FancyFontHelper;
+import com.mygdx.helpers.ScreenType;
+import com.mygdx.pong.PongGame;
+
+// Simple menu screen to:
+// - Start the game
+// - Check game information
+// - Quit the game
+public class MenuScreen extends ScreenAdapter{
+
+	private SpriteBatch batch;
+	private BitmapFont menu;
+	private BitmapFont title;
+	
+	public MenuScreen() {
+		this.batch = new SpriteBatch();
+		this.title = FancyFontHelper.getInstance().getFont(Color.RED, 80);
+		this.menu = FancyFontHelper.getInstance().getFont(Color.WHITE, 40);
+	}
+	
+	// Takes care of user input and screen transitions
+	public void update() {
+		if(Gdx.input.isKeyPressed(Input.Keys.Q))
+			PongGame.getInstance().exit(this);
+			
+		if(Gdx.input.isKeyPressed(Input.Keys.P)) 
+			PongGame.getInstance().changeScreen(this, ScreenType.GAME);
+		
+		//** Adding pvp options
+		if(Gdx.input.isKeyPressed(Input.Keys.L)) 
+			PongGame.getInstance().changeScreen(this, ScreenType.GAME2);
+			
+		if(Gdx.input.isKeyPressed(Input.Keys.I))
+			PongGame.getInstance().changeScreen(this, ScreenType.INFO);
+	}
+	
+	@Override
+	public void render(float delta) {
+		update();
+		
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		this.batch.begin();
+		
+		this.title.draw(batch, "LZSCC.210 - PONG!", 30, PongGame.getInstance().getWindowHeight() - 50);
+		
+		this.menu.draw(batch, getMenuText(), 10, PongGame.getInstance().getWindowHeight() / 2);
+		
+		this.batch.end();
+		
+	}
+	
+	private String getMenuText() {
+		return "Press:\n"
+				+ "   P - to start a new game\n"
+				+ "	  L - to start a new game vs Player2\n"
+				+ "   I - for informations\n"
+				+ "   Q - to quit the game";	
+	}
+	
+}
