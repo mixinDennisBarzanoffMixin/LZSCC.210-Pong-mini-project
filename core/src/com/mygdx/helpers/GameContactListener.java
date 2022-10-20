@@ -1,5 +1,6 @@
 package com.mygdx.helpers;
 
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -7,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.objects.Ball;
+import com.mygdx.objects.MysteryBox;
 import com.mygdx.screens.GameScreen;
 
 // This class takes care of behavioural changes in case of contacts between bodies
@@ -70,6 +72,11 @@ public class GameContactListener implements ContactListener {
 	// This method checks whether the player paddle is involved
 	private boolean playerContact(Fixture a, Fixture b) {
 		return a.getUserData() == ContactType.PLAYER || b.getUserData() == ContactType.PLAYER;
+	}
+
+	private boolean mysteryBoxContact(Fixture a, Fixture b) {
+		return (a.getUserData() == ContactType.BOX && b.getUserData() == ContactType.BALL) ||
+				(a.getUserData() == ContactType.BALL && b.getUserData() == ContactType.BOX);
 	}
 	
 	// This method checks whether the AI paddle is involved
