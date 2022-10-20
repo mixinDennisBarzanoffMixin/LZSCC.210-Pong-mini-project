@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2D;
@@ -17,11 +18,13 @@ import com.mygdx.helpers.Constants;
 import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.helpers.GameContactListener;
 import com.mygdx.helpers.ScreenType;
-import com.mygdx.objects.Ball;
-import com.mygdx.objects.Player;
-import com.mygdx.objects.PlayerAI;
-import com.mygdx.objects.Wall;
+import com.mygdx.objects.*;
 import com.mygdx.pong.PongGame;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 // This is the main game screen
 public class GameScreen extends ScreenAdapter{
@@ -40,6 +43,14 @@ public class GameScreen extends ScreenAdapter{
 	private Ball ball;
 	private Wall upper;
 	private Wall lower;
+
+	private List<MysteryBox> boxes;
+
+	public List<MysteryBox> getBoxes() {
+		return boxes;
+	}
+
+	private Random boxRandomness;
 	
 	public GameScreen(OrthographicCamera camera) {
 		Box2D.init();
@@ -53,7 +64,7 @@ public class GameScreen extends ScreenAdapter{
 		//this.debugRenderer = new Box2DDebugRenderer();
 		
 		this.world.setContactListener(new GameContactListener(this)); // Contact listener initialisation
-		
+
 		// Creation of all the required entities
 		this.player = new Player(16, PongGame.getInstance().getWindowHeight() / 2, this);
 	
@@ -66,7 +77,13 @@ public class GameScreen extends ScreenAdapter{
 		this.lower = new Wall((Constants.LOWER_WALL_SIZE/2), Constants.LOWER_WALL_SIZE, this);
 		
 		this.font = FancyFontHelper.getInstance().getFont(Color.WHITE, 40);
-		
+
+		this.boxRandomness = new Random(12);
+
+		this.boxes = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			this.boxes.add(new MysteryBox(this, boxRandomness));
+		}
 	}
 	
 	public void update() {
@@ -81,7 +98,15 @@ public class GameScreen extends ScreenAdapter{
 		this.ai.update();
 		
 		this.ball.update();
-		
+
+		final List<MysteryBox> intersecting = boxes.stream()
+				.filter(box -> Intersector.overlaps(this.getBall().getHitbox(), box.getHitbox()))
+				.collect(Collectors.toList());
+		intersecting.forEach(box -> {
+			this.boxes.remove(box);
+			onPowerUpShouldActivate(box);
+		});
+
 		this.batch.setProjectionMatrix(this.camera.combined);
 
 		// Reset button in case the ball gets stuck horizontally 
@@ -91,7 +116,7 @@ public class GameScreen extends ScreenAdapter{
 		// To return to the menu screen
 		if(Gdx.input.isKeyPressed(Input.Keys.M))
 			PongGame.getInstance().changeScreen(this, ScreenType.MENU);
-		
+
 		// The ball is reset to the centre if it goes our of the screen
 		// player or AI scores are updated accordingly
 		if(this.ball.getX() + 3*this.ball.getRadius() < 0) {
@@ -109,7 +134,12 @@ public class GameScreen extends ScreenAdapter{
 			PongGame.getInstance().changeScreen(this, ScreenType.END_GAME, getWinnerMessage());
 		
 	}
-	
+
+	void onPowerUpShouldActivate(MysteryBox box) {
+		// TODO: implement
+		System.out.println("On powerup should activate");
+	}
+
 	@Override
 	public void render(float delta) {
 		update();
@@ -118,9 +148,14 @@ public class GameScreen extends ScreenAdapter{
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		// Simple rendering of bodies and scores
-		
+
+
 		this.batch.begin();
-		
+
+		for (final MysteryBox box : boxes) {
+			box.render(batch);
+		}
+
 		this.player.render(batch);
 		
 		this.ai.render(batch);
