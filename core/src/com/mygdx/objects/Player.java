@@ -44,8 +44,9 @@ public class Player extends PlayerPaddle {
 	}
 	
 	public void PlayerPaddleHeight(int newheight) {
-		this.height = newheight;
+		height = newheight;
 		gameScreen.getWorld().destroyBody(body);
+		y += height/2;
 		CreateBody(gameScreen);
 	}
 	
@@ -54,7 +55,7 @@ public class Player extends PlayerPaddle {
 		
 		// Direction depends on user input
 		int direction = 0;
-		
+
 		if(Gdx.input.isKeyPressed(Input.Keys.UP))
 			direction = 1;
 		if(Gdx.input.isKeyPressed(Input.Keys.DOWN))
@@ -65,6 +66,7 @@ public class Player extends PlayerPaddle {
 		
 		setNewVelocity(height);
 		
+		//TODO problem is likely here
 		x = body.getPosition().x * Constants.PPM - (Constants.PLAYER_PADDLE_WIDTH/2);
 		y = body.getPosition().y * Constants.PPM - (height/2);
 					
@@ -76,7 +78,7 @@ public class Player extends PlayerPaddle {
 	}
 
 	public void CreateBody(GameScreen gameScreen) {
-		body = BodyHelper.createRectangularBody(x, y, Constants.PLAYER_PADDLE_WIDTH, height, BodyType.KinematicBody, 1f, gameScreen.getWorld(), ContactType.PLAYER);
+		body = BodyHelper.createRectangularBody(x + (Constants.PLAYER_PADDLE_WIDTH/2), y, Constants.PLAYER_PADDLE_WIDTH, height, BodyType.KinematicBody, 1f, gameScreen.getWorld(), ContactType.PLAYER);
 	}
 
 }

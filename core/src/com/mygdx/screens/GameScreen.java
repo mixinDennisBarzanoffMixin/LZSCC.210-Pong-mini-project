@@ -66,7 +66,7 @@ public class GameScreen extends ScreenAdapter{
 		this.world.setContactListener(new GameContactListener(this)); // Contact listener initialisation
 
 		// Creation of all the required entities
-		this.player = new Player(16, PongGame.getInstance().getWindowHeight() / 2, this);
+		this.player = new Player(8, PongGame.getInstance().getWindowHeight() / 2, this);
 	
 		this.ai = new PlayerAI(PongGame.getInstance().getWindowWidth() - 16, PongGame.getInstance().getWindowHeight() / 2, this);
 		
