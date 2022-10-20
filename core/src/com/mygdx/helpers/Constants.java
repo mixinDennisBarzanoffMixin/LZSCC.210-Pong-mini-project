@@ -25,11 +25,16 @@ public class Constants {
 	public static final int AI_PADDLE_MAX_SPEED = 8;
 	
 	// Score to end the game
-	public static final int END_SCORE = 10;
+	public static final int END_SCORE = 15;
 	
 	// Ball constants
 	public static final int BALL_SPEED = 8;
-	
+
+	public static final int MYSTERY_BOX_SIZE = 80;
+
+	public static final int MYSTERY_BOX_HITBOX_PADDING = 20;
+	public static final int MYSTERY_BOX_SPAWN_PADDING = 40;
+
 	public static final float BALL_RADIUS = 8;
 	
 }
