@@ -29,7 +29,12 @@ public class Constants {
 	
 	// Ball constants
 	public static final int BALL_SPEED = 8;
-	
+
+	public static final int MYSTERY_BOX_SIZE = 80;
+
+	public static final int MYSTERY_BOX_HITBOX_PADDING = 20;
+	public static final int MYSTERY_BOX_SPAWN_PADDING = 40;
+
 	public static final float BALL_RADIUS = 8;
 	
 }
