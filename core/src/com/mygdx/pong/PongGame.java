@@ -6,10 +6,14 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.helpers.ScreenType;
+import com.mygdx.objects.PlayerAI;
+import com.mygdx.screens.AIGame;
 import com.mygdx.screens.EndGameScreen;
 import com.mygdx.screens.GameScreen;
+
 import com.mygdx.screens.InfoScreen;
 import com.mygdx.screens.MenuScreen;
+import com.mygdx.screens.PlayerGame;
 
 
 //A singleton class representing the game. It takes care of
@@ -23,6 +27,7 @@ public class PongGame extends Game {
 	private int windowWidth, windowHeight;
 	
 	private OrthographicCamera ortographicCamera;
+	
 	
 	private PongGame() {
 		INSTANCE = this;
@@ -60,7 +65,10 @@ public class PongGame extends Game {
 	public void changeScreen(Screen currentScreen, ScreenType newScreenType) {
 		
 		if(newScreenType == ScreenType.GAME)
-			setScreen(new GameScreen(this.ortographicCamera));
+			setScreen(new AIGame(this.ortographicCamera));
+		//** add GAME2 for PVP
+		if(newScreenType == ScreenType.GAME2)
+			setScreen(new PlayerGame(this.ortographicCamera));
 		if(newScreenType == ScreenType.MENU)
 			setScreen(new MenuScreen());
 		if(newScreenType == ScreenType.INFO)
@@ -68,11 +76,11 @@ public class PongGame extends Game {
 	}
 	
 	public void changeScreen(Screen currentScreen, ScreenType newScreenType, String message) {
-		
-		if(newScreenType == ScreenType.END_GAME){
+			if(newScreenType == ScreenType.END_GAME){
 			setScreen(new EndGameScreen(message));
 		}
 	}
+	
 	
 	// Exit the game
 	public void exit(Screen screen) {
@@ -80,6 +88,4 @@ public class PongGame extends Game {
 		
 		Gdx.app.exit();
 	}
-	
-
 }

@@ -15,19 +15,20 @@ import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.helpers.Constants;
+import com.mygdx.helpers.ContactType;
 import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.helpers.GameContactListener;
 import com.mygdx.helpers.ScreenType;
-import com.mygdx.objects.*;
+import com.mygdx.objects.Ball;
+import com.mygdx.objects.Player;
+import com.mygdx.objects.Player2;
+import com.mygdx.objects.PlayerAI;
+import com.mygdx.objects.PlayerPaddle;
+import com.mygdx.objects.Wall;
 import com.mygdx.pong.PongGame;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-
 // This is the main game screen
-public class GameScreen extends ScreenAdapter{
+public abstract class GameScreen extends ScreenAdapter{
 
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
@@ -39,10 +40,13 @@ public class GameScreen extends ScreenAdapter{
 	
 	//objects
 	private Player player;
-	private PlayerAI ai;
+	private Player2 player2; //** added player2
+	private PlayerPaddle ai;
 	private Ball ball;
 	private Wall upper;
 	private Wall lower;
+
+	protected abstract PlayerPaddle initOtherPlayer();
 
 	private List<MysteryBox> boxes;
 
@@ -51,7 +55,7 @@ public class GameScreen extends ScreenAdapter{
 	}
 
 	private Random boxRandomness;
-	
+
 	public GameScreen(OrthographicCamera camera) {
 		Box2D.init();
 		
@@ -64,11 +68,12 @@ public class GameScreen extends ScreenAdapter{
 		this.debugRenderer = new Box2DDebugRenderer();
 		
 		this.world.setContactListener(new GameContactListener(this)); // Contact listener initialisation
-
 		// Creation of all the required entities
-		this.player = new Player(8, PongGame.getInstance().getWindowHeight() / 2, this);
-	
-		this.ai = new PlayerAI(PongGame.getInstance().getWindowWidth() - 16, PongGame.getInstance().getWindowHeight() / 2, this);
+		this.player = new Player(16, PongGame.getInstance().getWindowHeight() / 2, this);
+
+		this.ai = initOtherPlayer();
+		//** Create for player2
+		//this.player2 = new Player2(PongGame.getInstance().getWindowWidth() - 16, PongGame.getInstance().getWindowHeight() / 2, this);
 		
 		this.ball = new Ball(this);
 		
@@ -132,14 +137,11 @@ public class GameScreen extends ScreenAdapter{
 		// Checks if the game is over, and transitions to the end game screen
 		if(hasPlayerWon() || hasAIWon())
 			PongGame.getInstance().changeScreen(this, ScreenType.END_GAME, getWinnerMessage());
-		
-	}
+		//**Checks if player vs player2 who won
+	/*	if (hasPlayerWon() || hasPlayer2Won()) {
+			PongGame.getInstance().changeScreen(this, ScreenType.END_GAME, getPWinnerMessage());
+		}*/
 
-	void onPowerUpShouldActivate(MysteryBox box) {
-		// TODO: implement
-		System.out.println("On powerup should activate");
-		player.PlayerPaddleHeight(250);
-		//ai.AIPaddleHeight(128);
 	}
 
 	@Override
@@ -151,7 +153,6 @@ public class GameScreen extends ScreenAdapter{
 		
 		// Simple rendering of bodies and scores
 
-
 		this.batch.begin();
 
 		for (final MysteryBox box : boxes) {
@@ -162,6 +163,9 @@ public class GameScreen extends ScreenAdapter{
 		
 		this.ai.render(batch);
 		
+		//**add for player2
+		//this.player2.render(batch);
+
 		this.ball.render(batch);
 		
 		this.upper.render(batch);
@@ -195,10 +199,22 @@ public class GameScreen extends ScreenAdapter{
 	private boolean hasAIWon() {
 		return this.ai.getScore() == Constants.END_SCORE;
 	}
-	
+	//** add for player2haswon
+/*	private boolean hasPlayer2Won() {
+		return this.player2.getScore() == Constants.END_SCORE;
+	}
+	*/
+
 	private String getWinnerMessage() {
 		return hasPlayerWon() ? 
 				"You Won!\n  " + this.player.getScore() + " - " + this.ai.getScore() :
 				"You Lost!\n  " + this.player.getScore() + " - " + this.ai.getScore();
 	}
+	//** PvP winner message
+/*	private String getPWinnerMessage() {
+		return hasPlayerWon() ?
+				"Player 1 Wins!\n  " + this.player.getScore() + " - " + this.player2.getScore() :
+				"Player 2 Wins!\n  " + this.player.getScore() + " - " + this.player2.getScore();
+	}*/
+
 }

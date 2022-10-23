@@ -8,6 +8,7 @@ import com.mygdx.helpers.Constants;
 import com.mygdx.pong.PongGame;
 import com.mygdx.screens.GameScreen;
 
+
 // This is the main PlayerPaddle class
 // It represents the basis for both Player and PlayerAI classes
 public abstract class PlayerPaddle {
@@ -29,14 +30,12 @@ public abstract class PlayerPaddle {
 		pixmap.setBlending(Pixmap.Blending.None);
         pixmap.setColor(Color.WHITE);
         pixmap.fillRectangle(0, 0, 16, 64);
-        
 		this.texture = new Texture(pixmap);
-		
 		pixmap.dispose();
 		*/
 	}
 	
-	public void update() {/*		
+	public void update() {/*
 		x = body.getPosition().x * Constants.PPM - (Constants.PLAYER_PADDLE_WIDTH/2);
 		y = body.getPosition().y * Constants.PPM - (Constants.PLAYER_PADDLE_HEIGHT/2);*/
 	}

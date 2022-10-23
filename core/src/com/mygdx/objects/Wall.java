@@ -13,11 +13,13 @@ import com.mygdx.helpers.ContactType;
 import com.mygdx.pong.PongGame;
 import com.mygdx.screens.GameScreen;
 
+
 public class Wall {
 	
 	private Body body;
 	private float x, y;
-	private int width, height;
+	private int width;
+	int height;
 	private Texture texture;
 	
 	public Wall(float y, int height, GameScreen gameScreen) {
@@ -38,7 +40,9 @@ public class Wall {
 		this.body = BodyHelper.createRectangularBody(x, y, width, this.height, BodyType.StaticBody, 0, gameScreen.getWorld(), ContactType.WALL);
 		
 	}
+	// **Adding wall2 for gamescreen2
 	
+
 	public void render(SpriteBatch spriteBatch) {
 		spriteBatch.draw(texture, x - (width/2), y - (this.height/2), width, this.height);
 	}

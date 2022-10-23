@@ -25,53 +25,55 @@ public class Player extends PlayerPaddle {
 	private GameScreen gameScreen;
 
 	public Player(float x, float y, GameScreen gameScreen) {
-		
+
 		super(x,y,gameScreen);
 		this.height = 64;
 		this.gameScreen = gameScreen;
-		
+
 		Pixmap pixmap = new Pixmap(Constants.PLAYER_PADDLE_WIDTH, height, Pixmap.Format.RGBA8888);
 		pixmap.setBlending(Pixmap.Blending.None);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
-        
+
 		this.texture = new Texture(pixmap);
-		
+
 		pixmap.dispose();
-		
+
 		// Body creation: paddles are kinematic bodies
 		CreateBody(gameScreen);
 	}
-	
+
 	public void PlayerPaddleHeight(int newheight) {
 		height = newheight;
 		gameScreen.getWorld().destroyBody(body);
 		y += height/2;
 		CreateBody(gameScreen);
 	}
-	
+	//** for gameScreen2
+
+
 	public void update() {
 		//super.update();
 		
 		// Direction depends on user input
 		int direction = 0;
 
-		if(Gdx.input.isKeyPressed(Input.Keys.UP))
+		if(Gdx.input.isKeyPressed(Input.Keys.W))
 			direction = 1;
-		if(Gdx.input.isKeyPressed(Input.Keys.DOWN))
+		if(Gdx.input.isKeyPressed(Input.Keys.S))
 			direction = -1;
 		
 		// Computation of potential new velocity, it depends on the distance to borders
 		this.velY = getNewVelocity(direction, Constants.PLAYER_PADDLE_MAX_SPEED);
 		
 		setNewVelocity(height);
-		
+
 		//TODO problem is likely here
 		x = body.getPosition().x * Constants.PPM - (Constants.PLAYER_PADDLE_WIDTH/2);
 		y = body.getPosition().y * Constants.PPM - (height/2);
 					
 	}
-	
+
 	@Override
 	public void render(SpriteBatch spriteBatch) {
 		spriteBatch.draw(texture, x, y, Constants.PLAYER_PADDLE_WIDTH, height);

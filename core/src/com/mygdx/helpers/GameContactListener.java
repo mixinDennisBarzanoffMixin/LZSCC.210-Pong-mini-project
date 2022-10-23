@@ -1,6 +1,5 @@
 package com.mygdx.helpers;
 
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -8,7 +7,6 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.objects.Ball;
-import com.mygdx.objects.MysteryBox;
 import com.mygdx.screens.GameScreen;
 
 // This class takes care of behavioural changes in case of contacts between bodies
@@ -19,9 +17,12 @@ public class GameContactListener implements ContactListener {
 
 	private GameScreen gameScreen;
 	
+	
 	public GameContactListener(GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
 	}
+	//** Set up for GameScreen2
+
 	
 	@Override
 	public void beginContact(Contact contact) {
@@ -41,6 +42,8 @@ public class GameContactListener implements ContactListener {
 		if (a.getUserData() == null || b.getUserData() == null)
 			return;
 		
+		//** pick which game screen to play
+		
 		if (ballContact(a, b) && (playerContact(a, b) || aiContact(a, b))) {
 			// Apply an impulse to the ball so that the ball gets faster 
 			// whenever it gets in contact with a paddle
@@ -49,6 +52,14 @@ public class GameContactListener implements ContactListener {
 			ball.applyImpulse(ballVelocity.setLength(.025f));
 		}
 		
+		//Add player1 and player2 contact
+		if (ballContact(a,b) && (playerContact(a,b) || player2Contact(a,b))) {
+			Ball ball = this.gameScreen.getBall();
+			Vector2 ballVelocity = ball.getLinearVelocity();
+			ball.applyImpulse(ballVelocity.setLength(.025f));
+		
+		
+		}
 	}
 
 	@Override
@@ -73,14 +84,13 @@ public class GameContactListener implements ContactListener {
 	private boolean playerContact(Fixture a, Fixture b) {
 		return a.getUserData() == ContactType.PLAYER || b.getUserData() == ContactType.PLAYER;
 	}
-
-	private boolean mysteryBoxContact(Fixture a, Fixture b) {
-		return (a.getUserData() == ContactType.BOX && b.getUserData() == ContactType.BALL) ||
-				(a.getUserData() == ContactType.BALL && b.getUserData() == ContactType.BOX);
-	}
 	
 	// This method checks whether the AI paddle is involved
 	private boolean aiContact(Fixture a, Fixture b) {
 		return a.getUserData() == ContactType.AI || b.getUserData() == ContactType.AI;
+	}
+	//** This method checks whether the Player2 paddle is involved
+	private boolean player2Contact(Fixture a, Fixture b) {
+		return a.getUserData() == ContactType.PLAYER2 || b.getUserData() == ContactType.PLAYER2;
 	}
 }

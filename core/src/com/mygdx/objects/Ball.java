@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Blending;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -15,6 +13,7 @@ import com.mygdx.helpers.Constants;
 import com.mygdx.helpers.ContactType;
 import com.mygdx.pong.PongGame;
 import com.mygdx.screens.GameScreen;
+
 
 public class Ball {
 	
@@ -45,7 +44,11 @@ public class Ball {
 	}
 	
 
-	
+	//For gamescreen2
+
+
+
+
 	public void update() {
 		x = body.getPosition().x * Constants.PPM - (radius);
 		y = body.getPosition().y * Constants.PPM - (radius);
@@ -70,10 +73,6 @@ public class Ball {
 	
 	public void render(SpriteBatch spriteBatch) {
 		spriteBatch.draw(texture, x + radius, y + radius, radius*2, radius*2);
-	}
-
-	public Circle getHitbox() {
-		return new Circle(x + radius, y + radius, radius);
 	}
 	
 	// Three getter methods for x, y and radius

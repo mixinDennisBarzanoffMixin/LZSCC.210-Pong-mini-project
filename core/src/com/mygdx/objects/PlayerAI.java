@@ -19,26 +19,27 @@ public class PlayerAI extends PlayerPaddle {
 	public PlayerAI(float x, float y, GameScreen gameScreen) {
 		super(x, y, gameScreen);
 		this.height = 64;
-		
+
 		this.gameScreen = gameScreen;
 		
 		Pixmap pixmap = new Pixmap(Constants.AI_PADDLE_WIDTH, height, Pixmap.Format.RGBA8888);
 		pixmap.setBlending(Pixmap.Blending.None);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
-        
+
 		this.texture = new Texture(pixmap);
-		
+
 		pixmap.dispose();
-		
+
 		// Body creation: paddles are kinematic bodies
 		this.body = BodyHelper.createRectangularBody(x, y, Constants.AI_PADDLE_WIDTH, height, BodyType.KinematicBody, 1f, gameScreen.getWorld(), ContactType.AI);
 	}
-	
+
 	public void AIPaddleHeight(int newheight) {
 		this.height = newheight;
 	}
 	
+
 	@Override
 	public void update() {
 		//super.update();
@@ -58,11 +59,11 @@ public class PlayerAI extends PlayerPaddle {
 		this.velY = getNewVelocity(direction, Constants.AI_PADDLE_MAX_SPEED);
 		
 		setNewVelocity(height);
-		
+
 		x = body.getPosition().x * Constants.PPM - (Constants.AI_PADDLE_WIDTH/2);
 		y = body.getPosition().y * Constants.PPM - (height/2);
 	}
-	
+
 	@Override
 	public void render(SpriteBatch spriteBatch) {
 		spriteBatch.draw(texture, x, y, Constants.AI_PADDLE_WIDTH, height);

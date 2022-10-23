@@ -17,14 +17,10 @@ public class InfoScreen extends ScreenAdapter {
 	private BitmapFont menu;
 	private BitmapFont title;
 	
-	
 	public InfoScreen() {
-		
 		this.batch = new SpriteBatch();
 		this.title = FancyFontHelper.getInstance().getFont(Color.RED, 80);
 		this.menu = FancyFontHelper.getInstance().getFont(Color.WHITE, 30);
-		
-		
 	}
 	
 	// The user needs to press M to go back to the menu screen

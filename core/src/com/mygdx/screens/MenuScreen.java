@@ -21,24 +21,24 @@ public class MenuScreen extends ScreenAdapter{
 	private BitmapFont menu;
 	private BitmapFont title;
 	
-	
 	public MenuScreen() {
-		
 		this.batch = new SpriteBatch();
 		this.title = FancyFontHelper.getInstance().getFont(Color.RED, 80);
 		this.menu = FancyFontHelper.getInstance().getFont(Color.WHITE, 40);
-		
-		
 	}
 	
 	// Takes care of user input and screen transitions
 	public void update() {
 		if(Gdx.input.isKeyPressed(Input.Keys.Q))
 			PongGame.getInstance().exit(this);
-		
-		if(Gdx.input.isKeyPressed(Input.Keys.P))
+			
+		if(Gdx.input.isKeyPressed(Input.Keys.P)) 
 			PongGame.getInstance().changeScreen(this, ScreenType.GAME);
 		
+		//** Adding pvp options
+		if(Gdx.input.isKeyPressed(Input.Keys.L)) 
+			PongGame.getInstance().changeScreen(this, ScreenType.GAME2);
+			
 		if(Gdx.input.isKeyPressed(Input.Keys.I))
 			PongGame.getInstance().changeScreen(this, ScreenType.INFO);
 	}
@@ -63,8 +63,9 @@ public class MenuScreen extends ScreenAdapter{
 	private String getMenuText() {
 		return "Press:\n"
 				+ "   P - to start a new game\n"
+				+ "	  L - to start a new game vs Player2\n"
 				+ "   I - for informations\n"
-				+ "   Q - to quit the game";
-				
+				+ "   Q - to quit the game";	
 	}
+	
 }
