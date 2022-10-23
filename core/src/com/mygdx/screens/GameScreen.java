@@ -173,14 +173,18 @@ public abstract class GameScreen extends ScreenAdapter{
 		}
 	}
 
+	boolean activateMultipleBAlls = false;
+
 	void onPowerUpShouldActivate(MysteryBox box) {
 		// TODO: implement
 		System.out.println("On powerup should activate");
-		final boolean updateSize = boxRandomness.nextBoolean();
+		final boolean updateSize = !activateMultipleBAlls;
 		if (updateSize) {
 			player.PlayerPaddleHeight(250);
+			activateMultipleBAlls = true;
 			return;
 		}
+		activateMultipleBAlls = false;
 		final boolean hasBall1 =this.getBalls().stream().anyMatch(ball -> ball.contactType == ContactType.BALL);
 		final boolean hasBall2 =this.getBalls().stream().anyMatch(ball -> ball.contactType == ContactType.BALL_2);
 		final boolean hasBall3 = this.getBalls().stream().anyMatch(ball -> ball.contactType == ContactType.BALL_3);

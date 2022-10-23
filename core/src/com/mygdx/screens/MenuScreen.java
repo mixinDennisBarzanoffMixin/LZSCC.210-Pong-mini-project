@@ -43,9 +43,7 @@ public class MenuScreen extends ScreenAdapter{
 
 
 		//** Adding pvp options
-		if(Gdx.input.isKeyPressed(Input.Keys.L)) 
-			PongGame.getInstance().changeScreen(this, ScreenType.GAME2);
-			
+
 		if(Gdx.input.isKeyPressed(Input.Keys.I))
 			PongGame.getInstance().changeScreen(this, ScreenType.INFO);
 	}
@@ -70,7 +68,6 @@ public class MenuScreen extends ScreenAdapter{
 	private String getMenuText() {
 		return "Press:\n"
 				+ "   P - to start a new game\n"
-				+ "	  L - to start a new game vs Player2\n"
 				+ "   I - for informations\n"
 				+ "   Q - to quit the game";	
 	}

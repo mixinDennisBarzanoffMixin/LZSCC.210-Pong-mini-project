@@ -36,7 +36,7 @@ public class SelectScreen extends ScreenAdapter {
 			PongGame.getInstance().changeScreen(this, ScreenType.GAME);
 			
 		if(Gdx.input.isKeyPressed(Input.Keys.A))
-			PongGame.getInstance().changeScreen(this, ScreenType.GAME);
+			PongGame.getInstance().changeScreen(this, ScreenType.GAME2);
 					
 		
 	}
