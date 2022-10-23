@@ -19,13 +19,13 @@ import com.mygdx.helpers.ContactType;
 import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.helpers.GameContactListener;
 import com.mygdx.helpers.ScreenType;
-import com.mygdx.objects.Ball;
-import com.mygdx.objects.Player;
-import com.mygdx.objects.Player2;
-import com.mygdx.objects.PlayerAI;
-import com.mygdx.objects.PlayerPaddle;
-import com.mygdx.objects.Wall;
+import com.mygdx.objects.*;
 import com.mygdx.pong.PongGame;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 // This is the main game screen
 public abstract class GameScreen extends ScreenAdapter{
@@ -40,7 +40,6 @@ public abstract class GameScreen extends ScreenAdapter{
 	
 	//objects
 	private Player player;
-	private Player2 player2; //** added player2
 	private PlayerPaddle ai;
 	private Ball ball;
 	private Wall upper;
@@ -101,7 +100,7 @@ public abstract class GameScreen extends ScreenAdapter{
 		this.player.update();
 		
 		this.ai.update();
-		
+
 		this.ball.update();
 
 		final List<MysteryBox> intersecting = boxes.stream()
@@ -142,6 +141,13 @@ public abstract class GameScreen extends ScreenAdapter{
 			PongGame.getInstance().changeScreen(this, ScreenType.END_GAME, getPWinnerMessage());
 		}*/
 
+	}
+
+	void onPowerUpShouldActivate(MysteryBox box) {
+		// TODO: implement
+		System.out.println("On powerup should activate");
+		player.PlayerPaddleHeight(250);
+		//ai.AIPaddleHeight(128);
 	}
 
 	@Override

@@ -40,14 +40,14 @@ public class Player extends PlayerPaddle {
 		pixmap.dispose();
 
 		// Body creation: paddles are kinematic bodies
-		CreateBody(gameScreen);
+		CreateBody(gameScreen, height, ContactType.PLAYER);
 	}
 
 	public void PlayerPaddleHeight(int newheight) {
 		height = newheight;
 		gameScreen.getWorld().destroyBody(body);
 		y += height/2;
-		CreateBody(gameScreen);
+		CreateBody(gameScreen, height, ContactType.PLAYER);
 	}
 	//** for gameScreen2
 
@@ -79,8 +79,5 @@ public class Player extends PlayerPaddle {
 		spriteBatch.draw(texture, x, y, Constants.PLAYER_PADDLE_WIDTH, height);
 	}
 
-	public void CreateBody(GameScreen gameScreen) {
-		body = BodyHelper.createRectangularBody(x + (Constants.PLAYER_PADDLE_WIDTH/2), y, Constants.PLAYER_PADDLE_WIDTH, height, BodyType.KinematicBody, 1f, gameScreen.getWorld(), ContactType.PLAYER);
-	}
 
 }

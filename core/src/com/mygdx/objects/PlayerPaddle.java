@@ -4,7 +4,10 @@ package com.mygdx.objects;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.mygdx.helpers.BodyHelper;
 import com.mygdx.helpers.Constants;
+import com.mygdx.helpers.ContactType;
 import com.mygdx.pong.PongGame;
 import com.mygdx.screens.GameScreen;
 
@@ -76,5 +79,8 @@ public abstract class PlayerPaddle {
 		boolean tooCloseToUpperWall = this.velY > 0 && (this.body.getWorldCenter().y * Constants.PPM ) + (paddleHeight / 2) > PongGame.getInstance().getWindowHeight() - Constants.UPPER_WALL_SIZE - 10;
 		boolean tooCloseToLowerWall = this.velY < 0 && (this.body.getWorldCenter().y * Constants.PPM ) - (paddleHeight / 2) < Constants.LOWER_WALL_SIZE + 10;
 		return tooCloseToUpperWall || tooCloseToLowerWall;
+	}
+	public void CreateBody(GameScreen gameScreen, int height, ContactType contactType) {
+		body = BodyHelper.createRectangularBody(x + (Constants.PLAYER_PADDLE_WIDTH/2), y, Constants.PLAYER_PADDLE_WIDTH, height, BodyDef.BodyType.KinematicBody, 1f, gameScreen.getWorld(), contactType);
 	}
 }
