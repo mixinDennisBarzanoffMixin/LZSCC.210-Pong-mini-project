@@ -13,6 +13,7 @@ import com.mygdx.screens.GameScreen;
 
 import com.mygdx.screens.InfoScreen;
 import com.mygdx.screens.MenuScreen;
+import com.mygdx.screens.SelectScreen;
 import com.mygdx.screens.PlayerGame;
 
 
@@ -28,7 +29,7 @@ public class PongGame extends Game {
 	
 	private OrthographicCamera ortographicCamera;
 	
-	
+
 	private PongGame() {
 		INSTANCE = this;
 	}
@@ -65,10 +66,9 @@ public class PongGame extends Game {
 	public void changeScreen(Screen currentScreen, ScreenType newScreenType) {
 		
 		if(newScreenType == ScreenType.GAME)
-			setScreen(new AIGame(this.ortographicCamera));
-		//** add GAME2 for PVP
-		if(newScreenType == ScreenType.GAME2)
-			setScreen(new PlayerGame(this.ortographicCamera));
+			setScreen(new GameScreen(this.ortographicCamera));
+		if(newScreenType == ScreenType.SELECT)
+			setScreen(new SelectScreen());
 		if(newScreenType == ScreenType.MENU)
 			setScreen(new MenuScreen());
 		if(newScreenType == ScreenType.INFO)
@@ -81,7 +81,7 @@ public class PongGame extends Game {
 		}
 	}
 	
-	
+
 	// Exit the game
 	public void exit(Screen screen) {
 		FancyFontHelper.getInstance().dispose();

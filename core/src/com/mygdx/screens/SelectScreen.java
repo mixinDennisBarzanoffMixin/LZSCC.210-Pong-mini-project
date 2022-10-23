@@ -11,43 +11,34 @@ import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.helpers.ScreenType;
 import com.mygdx.pong.PongGame;
 
-// Simple menu screen to:
-// - Start the game
-// - Check game information
-// - Quit the game
-public class MenuScreen extends ScreenAdapter{
-
+public class SelectScreen extends ScreenAdapter {
+	
 	private SpriteBatch batch;
 	private BitmapFont menu;
 	private BitmapFont title;
 	
-	public MenuScreen() {
+	
+	public SelectScreen() {
+		
 		this.batch = new SpriteBatch();
 		this.title = FancyFontHelper.getInstance().getFont(Color.RED, 80);
 		this.menu = FancyFontHelper.getInstance().getFont(Color.WHITE, 40);
+		
+		
 	}
 	
 	// Takes care of user input and screen transitions
 	public void update() {
-		if(Gdx.input.isKeyPressed(Input.Keys.Q))
-			PongGame.getInstance().exit(this);
-			
-		if(Gdx.input.isKeyPressed(Input.Keys.P)) 
-		/*
+		if(Gdx.input.isKeyPressed(Input.Keys.M))
+			PongGame.getInstance().changeScreen(this, ScreenType.MENU);
+		
 		if(Gdx.input.isKeyPressed(Input.Keys.P))
 			PongGame.getInstance().changeScreen(this, ScreenType.GAME);
-		*/
-
-		if(Gdx.input.isKeyPressed(Input.Keys.P))
-			PongGame.getInstance().changeScreen(this, ScreenType.SELECT);
-
-
-		//** Adding pvp options
-		if(Gdx.input.isKeyPressed(Input.Keys.L)) 
-			PongGame.getInstance().changeScreen(this, ScreenType.GAME2);
 			
-		if(Gdx.input.isKeyPressed(Input.Keys.I))
-			PongGame.getInstance().changeScreen(this, ScreenType.INFO);
+		if(Gdx.input.isKeyPressed(Input.Keys.A))
+			PongGame.getInstance().changeScreen(this, ScreenType.GAME);
+					
+		
 	}
 	
 	@Override
@@ -59,9 +50,11 @@ public class MenuScreen extends ScreenAdapter{
 		
 		this.batch.begin();
 		
-		this.title.draw(batch, "LZSCC.210 - PONG!", 30, PongGame.getInstance().getWindowHeight() - 50);
+		this.title.draw(batch, "Select Game Mode", 10, PongGame.getInstance().getWindowHeight() - 50);
 		
 		this.menu.draw(batch, getMenuText(), 10, PongGame.getInstance().getWindowHeight() / 2);
+		
+		//this.menu.draw(batch, getMenuText(), 10, PongGame.getInstance().getWindowHeight() / 2 + 50);
 		
 		this.batch.end();
 		
@@ -69,10 +62,10 @@ public class MenuScreen extends ScreenAdapter{
 	
 	private String getMenuText() {
 		return "Press:\n"
-				+ "   P - to start a new game\n"
-				+ "	  L - to start a new game vs Player2\n"
-				+ "   I - for informations\n"
-				+ "   Q - to quit the game";	
+				+ "   P - to play against a player\n"
+				+ "   A - to play against AI\n"
+				+ "   M - to return to the main menu";
+				
 	}
-	
+
 }
