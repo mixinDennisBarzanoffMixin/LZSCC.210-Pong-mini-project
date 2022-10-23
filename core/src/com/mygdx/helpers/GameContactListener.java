@@ -45,20 +45,38 @@ public class GameContactListener implements ContactListener {
 		//** pick which game screen to play
 		
 		if (ballContact(a, b) && (playerContact(a, b) || aiContact(a, b))) {
+			updateVelocities();
 			// Apply an impulse to the ball so that the ball gets faster 
 			// whenever it gets in contact with a paddle
-			Ball ball = this.gameScreen.getBall();
-			Vector2 ballVelocity = ball.getLinearVelocity();
-			ball.applyImpulse(ballVelocity.setLength(.025f));
 		}
 		
 		//Add player1 and player2 contact
 		if (ballContact(a,b) && (playerContact(a,b) || player2Contact(a,b))) {
-			Ball ball = this.gameScreen.getBall();
-			Vector2 ballVelocity = ball.getLinearVelocity();
-			ball.applyImpulse(ballVelocity.setLength(.025f));
-		
-		
+			updateVelocities();
+		}
+	}
+
+	void updateVelocities() {
+		{
+			Ball ball = this.gameScreen.getBall(ContactType.BALL);
+			if (ball != null) {
+				Vector2 ballVelocity = ball.getLinearVelocity();
+				ball.applyImpulse(ballVelocity.setLength(.025f));
+			}
+		}
+		{
+			Ball ball = this.gameScreen.getBall(ContactType.BALL_2);
+			if (ball != null) {
+				Vector2 ballVelocity = ball.getLinearVelocity();
+				ball.applyImpulse(ballVelocity.setLength(.025f));
+			}
+		}
+		{
+			Ball ball = this.gameScreen.getBall(ContactType.BALL_3);
+			if (ball != null) {
+				Vector2 ballVelocity = ball.getLinearVelocity();
+				ball.applyImpulse(ballVelocity.setLength(.025f));
+			}
 		}
 	}
 
@@ -77,7 +95,8 @@ public class GameContactListener implements ContactListener {
 	// Auxiliary methods to simplify the if statement in the endContact method
 	// This method checks whether the ball is involved
 	private boolean ballContact(Fixture a, Fixture b) {
-		return a.getUserData() == ContactType.BALL || b.getUserData() == ContactType.BALL;
+		return a.getUserData() == ContactType.BALL || b.getUserData() == ContactType.BALL || a.getUserData() == ContactType.BALL_2
+				|| b.getUserData() == ContactType.BALL_2 || a.getUserData() == ContactType.BALL_3 || b.getUserData() == ContactType.BALL_3;
 	}
 	
 	// This method checks whether the player paddle is involved

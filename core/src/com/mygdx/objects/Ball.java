@@ -22,12 +22,15 @@ public class Ball {
 	protected float x, y;
 	protected float radius;
 	protected Texture texture;
+
+	public ContactType contactType;
 	
-	public Ball(GameScreen gameScreen) {
+	public Ball(GameScreen gameScreen, ContactType contactType) {
 		this.x = PongGame.getInstance().getWindowWidth() /2;
 		this.y = PongGame.getInstance().getWindowHeight() /2;
 				
 		this.radius = Constants.BALL_RADIUS;
+		this.contactType = contactType;
 		
 		// Pixmap is used to create the texture without need of a file
 		Pixmap pixmap = new Pixmap(16, 16, Pixmap.Format.RGBA8888);

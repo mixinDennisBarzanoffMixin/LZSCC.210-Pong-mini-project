@@ -75,7 +75,7 @@ public abstract class GameScreen extends ScreenAdapter{
 		//this.player2 = new Player2(PongGame.getInstance().getWindowWidth() - 16, PongGame.getInstance().getWindowHeight() / 2, this);
 
 		this.ball = new ArrayList<>();
-		this.ball.add(new Ball(this));
+		this.ball.add(new Ball(this, ContactType.BALL));
 
 		this.upper = new Wall(PongGame.getInstance().getWindowHeight() - (Constants.UPPER_WALL_SIZE/2), Constants.UPPER_WALL_SIZE, this);
 		
@@ -107,7 +107,8 @@ public abstract class GameScreen extends ScreenAdapter{
 		}
 
 		final List<MysteryBox> intersecting = boxes.stream()
-				.filter(box -> Intersector.overlaps(this.getBall().getHitbox(), box.getHitbox()))
+				.filter(box -> this.getBalls().stream().anyMatch(ball -> Intersector.overlaps(ball.getHitbox(), box.getHitbox())))
+				.distinct()
 				.collect(Collectors.toList());
 		intersecting.forEach(box -> {
 			this.boxes.remove(box);
@@ -117,29 +118,39 @@ public abstract class GameScreen extends ScreenAdapter{
 		this.batch.setProjectionMatrix(this.camera.combined);
 
 		// Reset button in case the ball gets stuck horizontally 
-		if(Gdx.input.isKeyPressed(Input.Keys.R))
-			for (final Ball ball : ball) {
-				ball.reset();
-			}
-		if(Gdx.input.isKeyPressed(Input.Keys.T))
-			ball.add(new Ball(this));
+		if(Gdx.input.isKeyPressed(Input.Keys.R)) {
+			resetItems();
+			getBalls().clear();
+			getBalls().add(new Ball(this, ContactType.BALL));
+		}
 
 		// To return to the menu screen
 		if(Gdx.input.isKeyPressed(Input.Keys.M))
 			PongGame.getInstance().changeScreen(this, ScreenType.MENU);
 
+		List<Ball> toRemove = new ArrayList<>();
 		for (final Ball ball : ball) {
 			// The ball is reset to the centre if it goes our of the screen
 			// player or AI scores are updated accordingly
 			if(ball.getX() + 3*ball.getRadius() < 0) {
 				ai.updateScrore();
-				ball.reset();
+				toRemove.add(ball);
 			}
 
 			if(ball.getX() - 3*ball.getRadius() > PongGame.getInstance().getWindowWidth()) {
 				this.player.updateScrore();
-				ball.reset();
+				toRemove.add(ball);
 			}
+		}
+		for (Ball ball:
+			 toRemove) {
+			getBalls()
+					.remove(ball);
+		}
+
+		if (getBalls().size() == 0) {
+			getBalls().add(new Ball(this, ContactType.BALL));
+			resetItems();
 		}
 
 
@@ -153,10 +164,43 @@ public abstract class GameScreen extends ScreenAdapter{
 
 	}
 
+	void resetItems() {
+		this.boxRandomness = new Random(12);
+
+		this.boxes = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			this.boxes.add(new MysteryBox(this, boxRandomness));
+		}
+	}
+
 	void onPowerUpShouldActivate(MysteryBox box) {
 		// TODO: implement
 		System.out.println("On powerup should activate");
-		player.PlayerPaddleHeight(250);
+		final boolean updateSize = boxRandomness.nextBoolean();
+		if (updateSize) {
+			player.PlayerPaddleHeight(250);
+			return;
+		}
+		final boolean hasBall1 =this.getBalls().stream().anyMatch(ball -> ball.contactType == ContactType.BALL);
+		final boolean hasBall2 =this.getBalls().stream().anyMatch(ball -> ball.contactType == ContactType.BALL_2);
+		final boolean hasBall3 = this.getBalls().stream().anyMatch(ball -> ball.contactType == ContactType.BALL_3);
+		if (hasBall1 && hasBall2 && hasBall3)
+			return;
+		if (hasBall1 && hasBall2)
+			ball.add(new Ball(this, ContactType.BALL_3));
+		if (hasBall2 && hasBall3)
+			ball.add(new Ball(this, ContactType.BALL));
+		if (hasBall1 && hasBall3)
+			ball.add(new Ball(this, ContactType.BALL_2));
+		if (hasBall1) {
+			ball.add(new Ball(this, ContactType.BALL_2));
+		}
+		if (hasBall2) {
+			ball.add(new Ball(this, ContactType.BALL));
+		}
+		if (hasBall3) {
+			ball.add(new Ball(this, ContactType.BALL));
+		}
 		//ai.AIPaddleHeight(128);
 	}
 
@@ -201,8 +245,12 @@ public abstract class GameScreen extends ScreenAdapter{
 		return world;
 	}
 	
-	public Ball getBall() {
-		return this.ball.get(0);
+	public List<Ball> getBalls() {
+		return this.ball;
+	}
+
+	public Ball getBall(ContactType contactType) {
+		return this.getBalls().stream().filter(ball -> ball.contactType == contactType).findFirst().orElse(null);
 	}
 
 	// Private auxiliary method to check winning conditions and create the end game message

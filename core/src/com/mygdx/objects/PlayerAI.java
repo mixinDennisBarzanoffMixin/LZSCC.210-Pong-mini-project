@@ -45,7 +45,7 @@ public class PlayerAI extends PlayerPaddle {
 		//super.update();
 		
 		// Gets the ball to check its position
-		Ball ball = gameScreen.getBall();
+		Ball ball = gameScreen.getBalls().get(0);
 		
 		// Movement direction depends on the difference in y coordinate with the ball
 		int direction = 0;
