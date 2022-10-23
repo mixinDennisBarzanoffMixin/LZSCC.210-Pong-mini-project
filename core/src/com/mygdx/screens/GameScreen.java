@@ -41,7 +41,7 @@ public abstract class GameScreen extends ScreenAdapter{
 	//objects
 	private Player player;
 	private PlayerPaddle ai;
-	private Ball ball;
+	private List<Ball> ball;
 	private Wall upper;
 	private Wall lower;
 
@@ -73,9 +73,10 @@ public abstract class GameScreen extends ScreenAdapter{
 		this.ai = initOtherPlayer();
 		//** Create for player2
 		//this.player2 = new Player2(PongGame.getInstance().getWindowWidth() - 16, PongGame.getInstance().getWindowHeight() / 2, this);
-		
-		this.ball = new Ball(this);
-		
+
+		this.ball = new ArrayList<>();
+		this.ball.add(new Ball(this));
+
 		this.upper = new Wall(PongGame.getInstance().getWindowHeight() - (Constants.UPPER_WALL_SIZE/2), Constants.UPPER_WALL_SIZE, this);
 		
 		this.lower = new Wall((Constants.LOWER_WALL_SIZE/2), Constants.LOWER_WALL_SIZE, this);
@@ -101,7 +102,9 @@ public abstract class GameScreen extends ScreenAdapter{
 		
 		this.ai.update();
 
-		this.ball.update();
+		for (final Ball ball : ball) {
+			ball.update();
+		}
 
 		final List<MysteryBox> intersecting = boxes.stream()
 				.filter(box -> Intersector.overlaps(this.getBall().getHitbox(), box.getHitbox()))
@@ -115,24 +118,31 @@ public abstract class GameScreen extends ScreenAdapter{
 
 		// Reset button in case the ball gets stuck horizontally 
 		if(Gdx.input.isKeyPressed(Input.Keys.R))
-			this.ball.reset();
-		
+			for (final Ball ball : ball) {
+				ball.reset();
+			}
+		if(Gdx.input.isKeyPressed(Input.Keys.T))
+			ball.add(new Ball(this));
+
 		// To return to the menu screen
 		if(Gdx.input.isKeyPressed(Input.Keys.M))
 			PongGame.getInstance().changeScreen(this, ScreenType.MENU);
 
-		// The ball is reset to the centre if it goes our of the screen
-		// player or AI scores are updated accordingly
-		if(this.ball.getX() + 3*this.ball.getRadius() < 0) {
-			this.ai.updateScrore();
-			this.ball.reset();
+		for (final Ball ball : ball) {
+			// The ball is reset to the centre if it goes our of the screen
+			// player or AI scores are updated accordingly
+			if(ball.getX() + 3*ball.getRadius() < 0) {
+				ai.updateScrore();
+				ball.reset();
+			}
+
+			if(ball.getX() - 3*ball.getRadius() > PongGame.getInstance().getWindowWidth()) {
+				this.player.updateScrore();
+				ball.reset();
+			}
 		}
-		
-		if(this.ball.getX() - 3*this.ball.getRadius() > PongGame.getInstance().getWindowWidth()) {
-			this.player.updateScrore();
-			this.ball.reset();
-		}
-		
+
+
 		// Checks if the game is over, and transitions to the end game screen
 		if(hasPlayerWon() || hasAIWon())
 			PongGame.getInstance().changeScreen(this, ScreenType.END_GAME, getWinnerMessage());
@@ -168,11 +178,9 @@ public abstract class GameScreen extends ScreenAdapter{
 		this.player.render(batch);
 		
 		this.ai.render(batch);
-		
-		//**add for player2
-		//this.player2.render(batch);
 
-		this.ball.render(batch);
+		for (final Ball ball : ball)
+			ball.render(batch);
 		
 		this.upper.render(batch);
 		
@@ -194,7 +202,7 @@ public abstract class GameScreen extends ScreenAdapter{
 	}
 	
 	public Ball getBall() {
-		return this.ball;
+		return this.ball.get(0);
 	}
 
 	// Private auxiliary method to check winning conditions and create the end game message
