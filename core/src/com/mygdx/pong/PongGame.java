@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.helpers.ScreenType;
+import com.mygdx.objects.Player;
 import com.mygdx.objects.PlayerAI;
 import com.mygdx.screens.AIGame;
 import com.mygdx.screens.EndGameScreen;
@@ -66,7 +67,9 @@ public class PongGame extends Game {
 	public void changeScreen(Screen currentScreen, ScreenType newScreenType) {
 		
 		if(newScreenType == ScreenType.GAME)
-			setScreen(new GameScreen(this.ortographicCamera));
+			setScreen(new PlayerGame(this.ortographicCamera));
+		if(newScreenType == ScreenType.GAME2)
+			setScreen(new AIGame(this.ortographicCamera));
 		if(newScreenType == ScreenType.SELECT)
 			setScreen(new SelectScreen());
 		if(newScreenType == ScreenType.MENU)

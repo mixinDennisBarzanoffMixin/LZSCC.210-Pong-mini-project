@@ -32,7 +32,7 @@ public class MenuScreen extends ScreenAdapter{
 		if(Gdx.input.isKeyPressed(Input.Keys.Q))
 			PongGame.getInstance().exit(this);
 			
-		if(Gdx.input.isKeyPressed(Input.Keys.P)) 
+//		if(Gdx.input.isKeyPressed(Input.Keys.P))
 		/*
 		if(Gdx.input.isKeyPressed(Input.Keys.P))
 			PongGame.getInstance().changeScreen(this, ScreenType.GAME);
