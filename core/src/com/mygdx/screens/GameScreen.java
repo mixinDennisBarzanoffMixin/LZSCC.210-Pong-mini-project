@@ -86,7 +86,7 @@ public abstract class GameScreen extends ScreenAdapter{
 		this.boxRandomness = new Random(12);
 
 		this.boxes = new ArrayList<>();
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 2; i++) {
 			this.boxes.add(new MysteryBox(this, boxRandomness));
 		}
 	}
@@ -165,10 +165,11 @@ public abstract class GameScreen extends ScreenAdapter{
 	}
 
 	void resetItems() {
+		player.PlayerPaddleHeight(64);
 		this.boxRandomness = new Random(12);
 
 		this.boxes = new ArrayList<>();
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 2; i++) {
 			this.boxes.add(new MysteryBox(this, boxRandomness));
 		}
 	}
@@ -180,7 +181,7 @@ public abstract class GameScreen extends ScreenAdapter{
 		System.out.println("On powerup should activate");
 		final boolean updateSize = !activateMultipleBAlls;
 		if (updateSize) {
-			player.PlayerPaddleHeight(250);
+			player.PlayerPaddleHeight(125);
 			activateMultipleBAlls = true;
 			return;
 		}
